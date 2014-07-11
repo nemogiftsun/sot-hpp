@@ -224,8 +224,7 @@ namespace dynamicgraph {
 	configuration.resize (path_->outputSize ());
 	if (state_ == NOT_STARTED) {
      
-	  //convert ((*path_) (0), configuration);
-    configuration = jointPositionSIN(time);
+	  convert ((*path_) (0), configuration);
 	}
 	else if (state_ == FINISHED) {
 	  convert ((*path_) (path_->length ()), configuration);

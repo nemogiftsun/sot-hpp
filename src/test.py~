@@ -6,7 +6,7 @@ q_init [0] = 1
 q_init [1] = 1
 q_init [2] = 1
 q_end = q_init [::]
-q_end [34] = 2
+q_end [34] = 1
 ps.addWaypoint (tuple (q_init))
 ps.addWaypoint (tuple (q_end))
 ps.configuration.recompute (0)
