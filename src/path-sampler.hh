@@ -35,6 +35,7 @@ namespace dynamicgraph {
 	// State of the sampler
 	enum State {
 	  NOT_STARTED = 0,
+          RESET,
 	  SAMPLING,
 	  FINISHED
 	};

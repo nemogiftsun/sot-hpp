@@ -173,11 +173,15 @@ namespace dynamicgraph {
 	}
 	Configuration_t waypoint (wp.size ());
 	convert (wp, waypoint);
-	if (lastWaypoint_.size () != 0) {
+	if (lastWaypoint_.size () != 0 ){
 	  // It is not the first way point, add a straight path
 	  path_->appendPath ((*steeringMethod_) (lastWaypoint_, waypoint));
 	}
 	lastWaypoint_ = waypoint;
+	if (state_ == RESET) {
+          state_ = NOT_STARTED;
+        }
+
       }
 
       void PathSampler::start ()
@@ -192,10 +196,12 @@ namespace dynamicgraph {
       void PathSampler::resetPath ()
       {
 	if (robot_) {
-	  path_ = PathVector::create (robot_->configSize ());
+	   path_ = PathVector::create (robot_->configSize ());
+         //   path.
 	}
 	// Keep last waypoint
-	state_ = NOT_STARTED;
+        lastWaypoint_.resize(0);
+	state_ = RESET;
       }
 
 
