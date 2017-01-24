@@ -1,7 +1,7 @@
 from dynamic_graph.sot.hpp import PathSampler
 ps = PathSampler ('ps')
-ps.loadRobotModel ('tom_description', 'fixed', 'tom_lacquey')
-q_init = 36*[0]
+ps.loadRobotModel ('tom_description', 'anchor', 'tom_hpp')
+q_init = 12*[0]
 ps.addWaypoint (tuple (q_init))
 q_init [0] = 1
 q_init [1] = 1
@@ -9,7 +9,7 @@ q_init [2] =
 q_end = q_init [::]
 #q_end [34] = 2
 ps.addWaypoint (tuple (q_end))
-ps.position.value = 36*[0]
+ps.position.value = 34*[0]
 ps.configuration.recompute (0)
 ps.setTimeStep (0.1)
 ps.start ()
