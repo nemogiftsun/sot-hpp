@@ -1,18 +1,22 @@
 from dynamic_graph.sot.hpp import PathSampler
 ps = PathSampler ('ps')
-ps.loadRobotModel ('sot_youbot', 'planar', 'pr2_sot')
+ps.loadRobotModel ('tom_description', 'fixed', 'tom_lacquey')
 q_init = 36*[0]
+ps.addWaypoint (tuple (q_init))
 q_init [0] = 1
 q_init [1] = 1
-q_init [2] = 1
+q_init [2] = 
 q_end = q_init [::]
-q_end [34] = 2
-ps.addWaypoint (tuple (q_init))
+#q_end [34] = 2
 ps.addWaypoint (tuple (q_end))
+ps.position.value = 36*[0]
 ps.configuration.recompute (0)
 ps.setTimeStep (0.1)
 ps.start ()
 ps.configuration.value
+ps.createJointReference('l_wrist_roll_joint')
+ps.l_wrist_roll_joint.recompute(1)
+ps.l_wrist_roll_joint.value
 for i in range (11):
     ps.configuration.recompute (i)
     print (ps.configuration.value [0])
