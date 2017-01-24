@@ -22,8 +22,14 @@
 #include <dynamic-graph/entity.h>
 #include <dynamic-graph/signal.h>
 #include <dynamic-graph/signal-ptr.h>
-#include <hpp/core/fwd.hh>
+#include <dynamic-graph/signal-time-dependent.h>
 #include <sot/hpp/config.hh>
+#include <sot/core/matrix-homogeneous.hh>
+      using ::hpp::model::ConfigurationIn_t;
+      using ::hpp::model::ConfigurationOut_t;
+      using ::hpp::model::Configuration_t;
+      using ::hpp::model::Transform3f;
+const int dofCode_[7] = {7,9,13,22,24,28,32}; 
 
 namespace dynamicgraph {
   namespace sot {
@@ -60,18 +66,27 @@ namespace dynamicgraph {
 	void loadRobotModel (const std::string& packageName,
 			     const std::string& rootJointType,
 			     const std::string& modelName);
+  void createReferenceJointSignal (const std::string& jointName );
+  MatrixHomogeneous& computePosition( const std::string& jointName, MatrixHomogeneous& res, int time);
       private:
 	Vector& computeConfiguration (Vector& configuration, const int& time);
 	Signal <Vector, int> configurationSOUT;
   SignalPtr<Vector,int> jointPositionSIN;
+  std::list< dynamicgraph::SignalBase<int>*  > genericSignalRefs;
 	::hpp::model::DevicePtr_t robot_;
+        ::hpp::core::ProblemPtr_t problem_;
 	::hpp::core::PathVectorPtr_t path_;
 	::hpp::core::SteeringMethodPtr_t steeringMethod_;
 	double timeStep_;
+  Vector configuration_t;
+  std::vector<std::string> jointMap_;
+  Transform3f T;
+  std::string referenceSignalName; 
   std::string rootJointType_;
 	::hpp::model::Configuration_t lastWaypoint_;
 	State state_;
 	int startTime_;
+	int samplingTime_;
       };
     } // namespace hpp
   } // namespace sot
