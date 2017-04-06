@@ -24,7 +24,7 @@
 #include <dynamic-graph/signal-ptr.h>
 #include <dynamic-graph/signal-time-dependent.h>
 #include <sot/hpp/config.hh>
-#include <sot/core/matrix-homogeneous.hh>
+#include <sot/core/matrix-geometry.hh>
       using ::hpp::model::ConfigurationIn_t;
       using ::hpp::model::ConfigurationOut_t;
       using ::hpp::model::Configuration_t;

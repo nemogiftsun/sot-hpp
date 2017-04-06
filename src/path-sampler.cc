@@ -65,86 +65,35 @@ namespace dynamicgraph {
       void convert (ConfigurationIn_t hppConfig, Vector& sotConfig)
       {
 
-	        for (size_type i=0; i<hppConfig.size (); ++i) {
-	          sotConfig (i) = hppConfig [i];
-	        }
+        for (size_type i=0; i<hppConfig.size (); ++i) {
+          sotConfig (i) = hppConfig [i];
+        }
 
       }
 
       // Convert configuration from hpp::model::Configuration_t to
       // dynamicgraph::Vector
-      void convert (const Vector& sotConfig, ConfigurationOut_t hppConfig)
+      void convert (const Vector& sotConfig, ConfigurationOut_t& hppConfig)
       {
-      // WORK ON PROGRESS 
-      /*
-      JointVector_t jointVector = robot_->getJointVector ();
-      for (std::size_t i = 0; i < jointVector.size (); ++i) 
-      {
-	    const JointPtr_t joint = jointVector [i];
-	    std::string name = joint->name ();
-      std::size_t size =  joint->configSize ();
-      jointPositionSIN(time);
-
-
-      }*/
-      // WORK ON PROGRESS
            
-
-	        for (size_type i=0; i<hppConfig.size (); ++i) {
-	          hppConfig [i] = sotConfig (i);
-	        }
+        for (size_type i=0; i<hppConfig.size (); ++i) {
+          hppConfig [i] = sotConfig (i);
+        }
       }
-
-
 
       void convert ( Vector& sotConfig,Vector currentstate)
       {
-       Vector larm,rarm;
-       larm.resize(6);rarm.resize(6);
+       Vector arm;
+       arm.resize(6);
        //sotConfig.extract(6,12,larm);
-       sotConfig.extract(0,6,rarm);
-       sotConfig.resize(34);
+       arm = sotConfig;
+       //sotConfig.extract(0,6,arm);
+       sotConfig.resize(12);
        sotConfig = currentstate;
-       for (int i=18; i<24; i++) {
-            sotConfig(i) = rarm(i-18);
+       for (int i=6; i<12; i++) {
+            sotConfig(i) = arm(i-6);
        }
-       //for (int i=18; i<24; i++) {
-            //sotConfig(i) = 0;
-       //}
-          /*
-          Vector temp;
-          temp.resize(44);
-          sotConfig.extract(0,44,temp);
-          sotConfig.resize(39);
-          sotConfig(0) = temp(0);
-          sotConfig(1) = temp(1);
-          sotConfig(5) = acos(temp(2));
-          int j = 4;
-	        for (int i=6; i<sotConfig.size (); ++i) {
-           const int *p;
-           p = std::find(dofCode_,dofCode_+7,i-6);
-            if (p != dofCode_+7){
-                sotConfig(i) = acos(temp(j));
-                j  = j+2;}
-            else{
-	              sotConfig (i) =  temp (j);
-                j = j+1;}
-	        }*/
 
-         /*
-          int i= 4,j=5;
-	        while (i<sotConfig.size ()) {
-            const int *p ;
-            p = std::find(dofCode_,dofCode_+7,i);
-            if (p != dofCode_+7){
-                sotConfig(i) = cos(temp(j));
-                sotConfig(i+1) = sin(temp(j));
-                i  = i+2;}
-            else{
-	              sotConfig (i) =  temp (j);
-                i = i+1;}
-            j  = j+1;
-	        }*/
       }
       
       void posetoMatrix( Vector& ref, MatrixHomogeneous& tm)
@@ -153,12 +102,6 @@ namespace dynamicgraph {
        MAL_S4x4_MATRIX_ACCESS_I_J(tm,0,3) = ref (0);
        MAL_S4x4_MATRIX_ACCESS_I_J(tm,1,3) = ref (1);
        MAL_S4x4_MATRIX_ACCESS_I_J(tm,2,3) = ref (2);
-
-/*
-    M= array([[1-2*qy**2-2*qz**2,2*qx*qy-2*qz*qw,2*qx*qz+2*qy*qw,0],
-        [2*qx*qy+2*qz*qw,1-2*qx**2-2*qz**2,2*qy*qz-2*qx*qw,0],
-        [2*qx*qz-2*qy*qw,2*qy*qz+2*qx*qw,1-2*qx**2-2*qy**2,0]])
-*/
 
        MAL_S4x4_MATRIX_ACCESS_I_J(tm,0,0) = 1-2*pow(ref(5),2)-2*pow(ref(6),2); 
        MAL_S4x4_MATRIX_ACCESS_I_J(tm,0,1) = 2*ref(4)*ref(5)-2*ref(6)*ref(3); 
@@ -182,7 +125,7 @@ namespace dynamicgraph {
 	lastWaypoint_ (), state_ (NOT_STARTED), startTime_ (), samplingTime_ (),rootJointType_("planar")
       {
 	using command::makeCommandVoid0;
-  using command::makeCommandVoid1;
+        using command::makeCommandVoid1;
 	using command::makeDirectSetter;
         using command::makeDirectGetter;
 	// Initialize input signal
@@ -268,17 +211,14 @@ namespace dynamicgraph {
       {
 
 	robot_ = Device::create ("modelName");
-        
 	::hpp::model::urdf::loadRobotModel (robot_, rootJointType, packageName,
 					    modelName, "", "");
-	problem_ = new Problem(robot_);
-
 	// Create a new empty path
 	path_ = PathVector::create (robot_->configSize (),robot_->configSize ());
 
-	steeringMethod_ = SteeringMethodStraight::create(problem_);
+	//steeringMethod_ = SteeringMethodStraight::create(problem_);
 
-//SteeringMethodPtr_t (new SteeringMethodStraight					       (robot_));
+	steeringMethod_ = SteeringMethodStraight::create(robot_);
 
       }
 
