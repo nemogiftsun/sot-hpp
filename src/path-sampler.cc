@@ -84,13 +84,13 @@ namespace dynamicgraph {
       void convert ( Vector& sotConfig,Vector currentstate)
       {
        Vector arm;
-       arm.resize(6);
+       arm.resize(14);
        //sotConfig.extract(6,12,larm);
        arm = sotConfig;
        //sotConfig.extract(0,6,arm);
-       sotConfig.resize(12);
+       sotConfig.resize(20);
        sotConfig = currentstate;
-       for (int i=6; i<12; i++) {
+       for (int i=6; i<20; i++) {
             sotConfig(i) = arm(i-6);
        }
 
